@@ -16,17 +16,19 @@ module.exports = async (req, res) => {
   try {
     const client = await connectToDatabase();
     
-    const db = client.db('taskdb');
+    // Si tu URI ya trae la base de datos al final, client.db() sin parámetros 
+    // usará automáticamente esa base de datos (taskdb).
+    const db = client.db(); 
+
     const nombreColeccion = req.query.coleccion || 'pendientes_actuales';
     const collection = db.collection(nombreColeccion);
 
     if (req.method === 'GET') {
       const documents = await collection.find({}).limit(50).toArray();
       
-      // Devolvemos información de diagnóstico
       return res.status(200).json({ 
         success: true, 
-        conectadoA_BaseDeDatos: db.databaseName, // <-- Te dirá a qué BD entró realmente
+        conectadoA_BaseDeDatos: db.databaseName, 
         coleccionConsultada: nombreColeccion, 
         totalDocumentos: documents.length,
         data: documents 
