@@ -1,14 +1,11 @@
 const { MongoClient } = require('mongodb');
 
-// Reutilizamos la conexión para no abrir cientos de conexiones en MongoDB Atlas
 let cachedClient = null;
 
 async function connectToDatabase() {
   if (cachedClient) {
     return cachedClient;
   }
-  
-  // Lee la cadena de conexión desde las variables de entorno de Vercel
   const client = new MongoClient(process.env.MONGODB_URI);
   await client.connect();
   cachedClient = client;
@@ -19,17 +16,23 @@ module.exports = async (req, res) => {
   try {
     const client = await connectToDatabase();
     
-    // Sustituye 'tu-base-de-datos' y 'tu-coleccion' por los nombres reales de tu MongoDB Atlas
-    const db = client.db('tu-base-de-datos');
-    const collection = db.collection('tu-coleccion');
+    // Tu base de datos fija según la imagen
+    const db = client.db('taskdb');
 
-    // Manejo de lectura (GET)
+    // Obtenemos la colección desde los parámetros de la URL (ej: /api/data?coleccion=usuarios)
+    // Si no envían ninguna, por defecto usará 'pendientes_actuales'
+    const nombreColeccion = req.query.coleccion || 'pendientes_actuales';
+    const collection = db.collection(nombreColeccion);
+
     if (req.method === 'GET') {
-      const documents = await collection.find({}).limit(20).toArray();
-      return res.status(200).json({ success: true, data: documents });
+      const documents = await collection.find({}).limit(50).toArray();
+      return res.status(200).json({ 
+        success: true, 
+        coleccionConsultada: nombreColeccion, 
+        data: documents 
+      });
     }
 
-    // Manejo de inserción (POST)
     if (req.method === 'POST') {
       const newDocument = req.body;
       const result = await collection.insertOne(newDocument);
