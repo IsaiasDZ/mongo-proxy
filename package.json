@@ -1,0 +1,9 @@
+{
+  "name": "mongo-proxy",
+  "version": "1.0.0",
+  "description": "Proxy HTTP para conectar con MongoDB Atlas",
+  "main": "api/data.js",
+  "dependencies": {
+    "mongodb": "^6.0.0"
+  }
+}
