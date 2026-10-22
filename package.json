@@ -1,9 +1,11 @@
 {
   "name": "mongo-proxy",
-  "version": "1.0.0",
-  "description": "Proxy HTTP para conectar con MongoDB Atlas",
-  "main": "api/data.js",
+  "private": true,
+  "description": "Proxy HTTPS entre PendientesCROD y MongoDB Atlas (la red bloquea el puerto 27017).",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
-    "mongodb": "^6.0.0"
+    "mongodb": "7.7.0"
   }
 }
