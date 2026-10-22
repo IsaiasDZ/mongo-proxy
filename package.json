@@ -1,7 +1,10 @@
 {
   "name": "mongo-proxy",
   "private": true,
-  "description": "Proxy HTTPS entre PendientesCROD y MongoDB Atlas (la red bloquea el puerto 27017).",
+  "description": "Proxy HTTPS entre PendientesCROD y MongoDB Atlas (la red bloquea el puerto 27017). Vercel usa api/data.js; Railway ejecuta server.js.",
+  "scripts": {
+    "start": "node api/server.js"
+  },
   "engines": {
     "node": ">=20"
   },
