@@ -69,6 +69,10 @@ server.headersTimeout = 66000;
 
 server.listen(PORT, '0.0.0.0', () => console.log(`Proxy de datos escuchando en el puerto ${PORT}`));
 
+// Con proceso siempre encendido se detectan en vivo todos los cambios de la base
+// (incluidos los hechos fuera de la app). PROXY_LIVE_CHANGES=0 lo desactiva.
+if (process.env.PROXY_LIVE_CHANGES !== '0') handler.startChangeTracking();
+
 // Railway envía SIGTERM al redesplegar: termina las peticiones en curso.
 process.on('SIGTERM', () => {
   server.close(() => process.exit(0));
